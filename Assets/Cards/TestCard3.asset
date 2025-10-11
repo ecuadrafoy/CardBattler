@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61f82d3559264df40be8a970e375d3e3, type: 3}
   m_Name: TestCard3
   m_EditorClassIdentifier: 
-  cardName: Test Card 2
-  actionDescription: "Second card test\t"
+  cardName: Test Card 3
+  actionDescription: "Third  card test\t"
   cardLore: Wow so cool
   currentHealth: 10
   attackPower: 5
   manaCost: 5
-  characterSprite: {fileID: 21300000, guid: 9594c9e691dd77844a7bf2eb3a27e995, type: 3}
-  backgroundSprite: {fileID: 21300000, guid: 91f263c4e2d827c4fa3cb47b7369c9bf, type: 3}
+  characterSprite: {fileID: 21300000, guid: e51ba10e3fdb56649a34ec1123e9b1bf, type: 3}
+  backgroundSprite: {fileID: 21300000, guid: 1aec4ea55e483344eb21c36b5dcabfd8, type: 3}
