@@ -48,6 +48,7 @@
     <Analyzer Include="E:\Program Files\Unity Hub\Engine\6000.1.15f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\CardPlacePoint.cs" />
     <Compile Include="Assets\Scripts\SOCard.cs" />
     <Compile Include="Assets\Scripts\HandController.cs" />
     <Compile Include="Assets\Scripts\Card.cs" />
