@@ -60,18 +60,28 @@ public class Card : MonoBehaviour
                     CardPlacePoint selectedPoint = hit.collider.GetComponent<CardPlacePoint>();
                     if (selectedPoint.activeCard == null && selectedPoint.isPlayerPoint)
                     {
-                        //Place the card
-                        selectedPoint.activeCard = this;
-                        assignedPlace = selectedPoint;
-                        MoveToPoint(selectedPoint.transform.position, Quaternion.identity);
-                        inHand = false;
-                        isSelected = false;
-                        handController.RemoveCardFromHand(this);
+                        if (BattleController.instance.playerMana >= manaCost)
+                        {
+                            //Place the card
+                            selectedPoint.activeCard = this;
+                            assignedPlace = selectedPoint;
+                            MoveToPoint(selectedPoint.transform.position, Quaternion.identity);
+                            inHand = false;
+                            isSelected = false;
+                            handController.RemoveCardFromHand(this);
+                            BattleController.instance.SpendPlayerMana(manaCost);
+                        }
+                        else
+                        {
+                            UICOntroller.instance.ShowManaWarning();
+                            ReturnToHand();
+                        }
 
                     }
                     else
                     {
                         ReturnToHand();
+
                     }
                 }
                 else
