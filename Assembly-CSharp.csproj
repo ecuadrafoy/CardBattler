@@ -52,6 +52,7 @@
     <Compile Include="Assets\Scripts\SOCard.cs" />
     <Compile Include="Assets\Scripts\BattleController.cs" />
     <Compile Include="Assets\Scripts\HandController.cs" />
+    <Compile Include="Assets\Scripts\DeckController.cs" />
     <Compile Include="Assets\Scripts\Card.cs" />
     <Compile Include="Assets\Scripts\UICOntroller.cs" />
   </ItemGroup>

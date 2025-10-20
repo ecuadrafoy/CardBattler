@@ -12,6 +12,7 @@ public class UICOntroller : MonoBehaviour
     public GameObject manaWarning;
     public float manaWarningTime;
     private float manaWarningCounter;
+    public GameObject drawCardButton;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -39,5 +40,9 @@ public class UICOntroller : MonoBehaviour
     {
         manaWarning.SetActive(true);
         manaWarningCounter = manaWarningTime;
+    }
+    public void DrawCard()
+    {
+        DeckController.instance.DrawCardForMana();
     }
 }

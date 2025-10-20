@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class Card : MonoBehaviour
 {
-    [SerializeField] SOCard cardSO;
+    public SOCard cardSO;
     public int currentHealth;
     public int attackPower, manaCost;
 
