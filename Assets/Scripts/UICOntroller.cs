@@ -12,7 +12,7 @@ public class UICOntroller : MonoBehaviour
     public GameObject manaWarning;
     public float manaWarningTime;
     private float manaWarningCounter;
-    public GameObject drawCardButton;
+    public GameObject drawCardButton, endTurnButton;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -44,5 +44,10 @@ public class UICOntroller : MonoBehaviour
     public void DrawCard()
     {
         DeckController.instance.DrawCardForMana();
+    }
+    public void EndPlayerTurn()
+    {
+
+        BattleController.instance.EndPlayerTurn();
     }
 }

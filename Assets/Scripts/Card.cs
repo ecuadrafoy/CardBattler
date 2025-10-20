@@ -55,7 +55,7 @@ public class Card : MonoBehaviour
 
             if (Input.GetMouseButtonDown(0) && justPressed == false)
             {
-                if (Physics.Raycast(ray, out hit, 100f, whatisPlacement))
+                if (Physics.Raycast(ray, out hit, 100f, whatisPlacement) && BattleController.instance.currentPhase == BattleController.TurnOrder.playerActive)
                 {
                     CardPlacePoint selectedPoint = hit.collider.GetComponent<CardPlacePoint>();
                     if (selectedPoint.activeCard == null && selectedPoint.isPlayerPoint)
@@ -89,6 +89,7 @@ public class Card : MonoBehaviour
                     ReturnToHand();
                 }
             }
+
         }
         justPressed = false;
     }
@@ -118,7 +119,7 @@ public class Card : MonoBehaviour
     }
     private void OnMouseOver()
     {
-        if (inHand)
+        if (inHand && BattleController.instance.currentPhase == BattleController.TurnOrder.playerActive)
         {
             MoveToPoint(handController.cardPosition[handPosition] + new Vector3(0f, 1f, 0.5f), Quaternion.identity);
             Debug.Log("Mouse Detected");
