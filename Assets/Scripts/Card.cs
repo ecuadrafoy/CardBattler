@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class Card : MonoBehaviour
 {
     public SOCard cardSO;
+    public bool isPlayer;
     public int currentHealth;
     public int attackPower, manaCost;
 
@@ -27,8 +28,14 @@ public class Card : MonoBehaviour
     public LayerMask whatIsDesktop, whatisPlacement;
     private bool justPressed;
     public CardPlacePoint assignedPlace;
+    public Animator animator;
     void Start()
     {
+        if (targetPoint == Vector3.zero)
+        {
+            targetPoint = transform.position;
+            targetRotation = transform.rotation;
+        }
         SetupCard();
         handController = FindObjectOfType<HandController>();
         cardCollider = GetComponent<Collider>();
@@ -100,9 +107,7 @@ public class Card : MonoBehaviour
         attackPower = cardSO.attackPower;
         manaCost = cardSO.manaCost;
 
-        healthText.text = currentHealth.ToString();
-        attackText.text = attackPower.ToString();
-        manaText.text = manaCost.ToString();
+        UpdateCardDisplay();
 
         nameText.text = cardSO.cardName;
         actionDescriptionText.text = cardSO.actionDescription;
@@ -119,7 +124,7 @@ public class Card : MonoBehaviour
     }
     private void OnMouseOver()
     {
-        if (inHand && BattleController.instance.currentPhase == BattleController.TurnOrder.playerActive)
+        if (inHand && isPlayer)
         {
             MoveToPoint(handController.cardPosition[handPosition] + new Vector3(0f, 1f, 0.5f), Quaternion.identity);
             Debug.Log("Mouse Detected");
@@ -127,14 +132,14 @@ public class Card : MonoBehaviour
     }
     private void OnMouseExit()
     {
-        if (inHand)
+        if (inHand && isPlayer)
         {
             MoveToPoint(handController.cardPosition[handPosition], handController.minPosition.rotation);
         }
     }
     void OnMouseDown()
     {
-        if (inHand)
+        if (inHand && BattleController.instance.currentPhase == BattleController.TurnOrder.playerActive && isPlayer)
         {
             isSelected = true;
             cardCollider.enabled = false;
@@ -146,5 +151,26 @@ public class Card : MonoBehaviour
         isSelected = false;
         cardCollider.enabled = true;
         MoveToPoint(handController.cardPosition[handPosition], handController.minPosition.rotation);
+    }
+    public void DamageCard(int damageAmount)
+    {
+        currentHealth -= damageAmount;
+        if (currentHealth <= 0)
+        {
+            currentHealth = 0;
+            assignedPlace.activeCard = null;
+            MoveToPoint(BattleController.instance.discardPoint.position, BattleController.instance.discardPoint.rotation);
+            animator.SetTrigger("Jump");
+            Destroy(gameObject, 5f);
+        }
+        UpdateCardDisplay();
+
+        animator.SetTrigger("Hurt");
+    }
+    public void UpdateCardDisplay()
+    {
+        healthText.text = currentHealth.ToString();
+        attackText.text = attackPower.ToString();
+        manaText.text = manaCost.ToString();
     }
 }

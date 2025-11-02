@@ -50,11 +50,13 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\CardPlacePoint.cs" />
     <Compile Include="Assets\Scripts\SOCard.cs" />
+    <Compile Include="Assets\Scripts\UIDamageIndicator.cs" />
     <Compile Include="Assets\Scripts\BattleController.cs" />
     <Compile Include="Assets\Scripts\HandController.cs" />
     <Compile Include="Assets\Scripts\DeckController.cs" />
     <Compile Include="Assets\Scripts\Card.cs" />
     <Compile Include="Assets\Scripts\UICOntroller.cs" />
+    <Compile Include="Assets\Scripts\CardPointsController.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

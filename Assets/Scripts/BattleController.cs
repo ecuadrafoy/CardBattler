@@ -15,6 +15,9 @@ public class BattleController : MonoBehaviour
     public int cardsToDrawPerTurn = 2;
     public enum TurnOrder { playerActive, playerCardAttacks, enemyActive, enemyCardAttacks }
     public TurnOrder currentPhase;
+    public Transform discardPoint;
+    public int playerHealth;
+    public int enemyHealth;
     void Start()
     {
         //playerMana = startingMana;
@@ -22,6 +25,8 @@ public class BattleController : MonoBehaviour
         currentPlayerMaxMana = startingMana;
         FillPlayerMana();
         DeckController.instance.DrawMultipleCards(startingCardsAmount);
+        UICOntroller.instance.SetPlayerHealthText(playerHealth);
+        UICOntroller.instance.SetEnemyHealthText(enemyHealth);
     }
 
     // Update is called once per frame
@@ -67,16 +72,18 @@ public class BattleController : MonoBehaviour
                 DeckController.instance.DrawMultipleCards(cardsToDrawPerTurn);
                 break;
             case TurnOrder.playerCardAttacks:
-                Debug.Log("Skipping player card attacks");
-                AdvanceTurn();
+                //Debug.Log("Skipping player card attacks");
+                //AdvanceTurn();
+                CardPointsController.instance.PlayerAttack();
                 break;
             case TurnOrder.enemyActive:
                 Debug.Log("Skipping enemy actions");
                 AdvanceTurn();
                 break;
             case TurnOrder.enemyCardAttacks:
-                Debug.Log("Skipping enemy card attacks");
-                AdvanceTurn();
+                //Debug.Log("Skipping enemy card attacks");
+                //AdvanceTurn();
+                CardPointsController.instance.EnemyAttack();
                 break;
         }
     }
@@ -86,6 +93,39 @@ public class BattleController : MonoBehaviour
         UICOntroller.instance.endTurnButton.SetActive(false);
         UICOntroller.instance.drawCardButton.SetActive(false);
         AdvanceTurn();
+    }
+    public void DamagePlayer(int damageAmount)
+    {
+        if (playerHealth > 0)
+        {
+            playerHealth -= damageAmount;
+            if (playerHealth <= 0)
+            {
+                playerHealth = 0;
+                // End Battle
+            }
+        }
+        UICOntroller.instance.SetPlayerHealthText(playerHealth);
+        UIDamageIndicator damageClone = Instantiate(UICOntroller.instance.playerDamage, UICOntroller.instance.playerDamage.transform.parent);
+        damageClone.damageText.text = damageAmount.ToString();
+        damageClone.gameObject.SetActive(true);
+    }
+    public void DamageEnemy(int damageAmount)
+    {
+        if (enemyHealth > 0)
+        {
+            enemyHealth -= damageAmount;
+            if (enemyHealth <= 0)
+            {
+                enemyHealth = 0;
+                // End Battle
+            }
+            UICOntroller.instance.SetEnemyHealthText(enemyHealth);
+            UIDamageIndicator damageClone = Instantiate(UICOntroller.instance.enemyDamage, UICOntroller.instance.enemyDamage.transform.parent);
+            damageClone.damageText.text = damageAmount.ToString();
+            damageClone.gameObject.SetActive(true);
+        }
+
     }
 
 }
