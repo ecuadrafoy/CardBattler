@@ -14,6 +14,8 @@ public class UICOntroller : MonoBehaviour
     private float manaWarningCounter;
     public GameObject drawCardButton, endTurnButton;
     public UIDamageIndicator playerDamage, enemyDamage;
+    public GameObject battleEndScreen;
+    public TMP_Text battleResultText;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -62,5 +64,20 @@ public class UICOntroller : MonoBehaviour
     public void SetEnemyManaText(int manaAmount)
     {
         enemyManaText.text = "Mana: " + manaAmount;
+    }
+
+    public void MainMenu()
+    {
+
+    }
+
+    public void RestartLevel()
+    {
+
+    }
+
+    public void ChooseNewBattle()
+    {
+
     }
 }

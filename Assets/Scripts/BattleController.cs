@@ -1,3 +1,4 @@
+using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -10,6 +11,7 @@ public class BattleController : MonoBehaviour
     }
     public int startingMana = 4, maxMana = 12;
     public int playerMana, enemyMana;
+    public bool battleEnded;
     private int currentPlayerMaxMana, currentEnemyMaxMana;
     public int startingCardsAmount = 5;
     public int cardsToDrawPerTurn = 2;
@@ -18,6 +20,7 @@ public class BattleController : MonoBehaviour
     public Transform discardPoint;
     public int playerHealth;
     public int enemyHealth;
+    public float resultScreenDelayTime = 1f;
     void Start()
     {
         //playerMana = startingMana;
@@ -56,43 +59,46 @@ public class BattleController : MonoBehaviour
     }
     public void AdvanceTurn()
     {
-        currentPhase++;
-        if ((int)currentPhase >= System.Enum.GetValues(typeof(TurnOrder)).Length)
+        if (battleEnded == false)
         {
-            currentPhase = 0;
-        }
-        switch (currentPhase)
-        {
-            case TurnOrder.playerActive:
-                UICOntroller.instance.endTurnButton.SetActive(true);
-                UICOntroller.instance.drawCardButton.SetActive(true);
-                if (currentPlayerMaxMana < maxMana)
-                {
-                    currentPlayerMaxMana++;
-                }
-                FillPlayerMana();
-                DeckController.instance.DrawMultipleCards(cardsToDrawPerTurn);
-                break;
-            case TurnOrder.playerCardAttacks:
-                //Debug.Log("Skipping player card attacks");
-                //AdvanceTurn();
-                CardPointsController.instance.PlayerAttack();
-                break;
-            case TurnOrder.enemyActive:
-                //Debug.Log("Skipping enemy actions");
-                //AdvanceTurn();
-                if (currentEnemyMaxMana < maxMana)
-                {
-                    currentEnemyMaxMana++;
-                }
-                FillEnemyMana();
-                EnemyController.instance.StartAction();
-                break;
-            case TurnOrder.enemyCardAttacks:
-                //Debug.Log("Skipping enemy card attacks");
-                //AdvanceTurn();
-                CardPointsController.instance.EnemyAttack();
-                break;
+            currentPhase++;
+            if ((int)currentPhase >= System.Enum.GetValues(typeof(TurnOrder)).Length)
+            {
+                currentPhase = 0;
+            }
+            switch (currentPhase)
+            {
+                case TurnOrder.playerActive:
+                    UICOntroller.instance.endTurnButton.SetActive(true);
+                    UICOntroller.instance.drawCardButton.SetActive(true);
+                    if (currentPlayerMaxMana < maxMana)
+                    {
+                        currentPlayerMaxMana++;
+                    }
+                    FillPlayerMana();
+                    DeckController.instance.DrawMultipleCards(cardsToDrawPerTurn);
+                    break;
+                case TurnOrder.playerCardAttacks:
+                    //Debug.Log("Skipping player card attacks");
+                    //AdvanceTurn();
+                    CardPointsController.instance.PlayerAttack();
+                    break;
+                case TurnOrder.enemyActive:
+                    //Debug.Log("Skipping enemy actions");
+                    //AdvanceTurn();
+                    if (currentEnemyMaxMana < maxMana)
+                    {
+                        currentEnemyMaxMana++;
+                    }
+                    FillEnemyMana();
+                    EnemyController.instance.StartAction();
+                    break;
+                case TurnOrder.enemyCardAttacks:
+                    //Debug.Log("Skipping enemy card attacks");
+                    //AdvanceTurn();
+                    CardPointsController.instance.EnemyAttack();
+                    break;
+            }
         }
     }
 
@@ -104,13 +110,14 @@ public class BattleController : MonoBehaviour
     }
     public void DamagePlayer(int damageAmount)
     {
-        if (playerHealth > 0)
+        if (playerHealth > 0 || !battleEnded)
         {
             playerHealth -= damageAmount;
             if (playerHealth <= 0)
             {
                 playerHealth = 0;
                 // End Battle
+                EndBattle();
             }
         }
         UICOntroller.instance.SetPlayerHealthText(playerHealth);
@@ -120,13 +127,14 @@ public class BattleController : MonoBehaviour
     }
     public void DamageEnemy(int damageAmount)
     {
-        if (enemyHealth > 0)
+        if (enemyHealth > 0 || battleEnded == false)
         {
             enemyHealth -= damageAmount;
             if (enemyHealth <= 0)
             {
                 enemyHealth = 0;
                 // End Battle
+                EndBattle();
             }
             UICOntroller.instance.SetEnemyHealthText(enemyHealth);
             UIDamageIndicator damageClone = Instantiate(UICOntroller.instance.enemyDamage, UICOntroller.instance.enemyDamage.transform.parent);
@@ -149,6 +157,42 @@ public class BattleController : MonoBehaviour
     {
         enemyMana = currentEnemyMaxMana;
         UICOntroller.instance.SetEnemyManaText(enemyMana);
+    }
+
+    void EndBattle()
+    {
+        battleEnded = true;
+        HandController.instance.EmptyHand();
+        if (enemyHealth <= 0)
+        {
+            UICOntroller.instance.battleResultText.text = "YOU WON!";
+            foreach (CardPlacePoint point in CardPointsController.instance.enemyCardPoints)
+            {
+                if (point.activeCard != null)
+                {
+                    point.activeCard.MoveToPoint(discardPoint.position, point.activeCard.transform.rotation);
+                }
+            }
+        }
+        else
+        {
+            UICOntroller.instance.battleResultText.text = "YOU LOST!";
+            foreach (CardPlacePoint point in CardPointsController.instance.playerCardPoints)
+            {
+                if (point.activeCard != null)
+                {
+                    point.activeCard.MoveToPoint(discardPoint.position, point.activeCard.transform.rotation);
+                }
+            }
+        }
+        StartCoroutine(ShowResultCo());
+    }
+
+    IEnumerator ShowResultCo()
+    {
+        yield return new WaitForSeconds(resultScreenDelayTime);
+        UICOntroller.instance.battleEndScreen.SetActive(true);
+
     }
 
 }
