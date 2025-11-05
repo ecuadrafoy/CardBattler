@@ -8,7 +8,7 @@ public class UICOntroller : MonoBehaviour
     {
         instance = this;
     }
-    public TMP_Text playerManaText, playerHealthText, enemyHealthText;
+    public TMP_Text playerManaText, playerHealthText, enemyHealthText, enemyManaText;
     public GameObject manaWarning;
     public float manaWarningTime;
     private float manaWarningCounter;
@@ -58,5 +58,9 @@ public class UICOntroller : MonoBehaviour
     {
 
         BattleController.instance.EndPlayerTurn();
+    }
+    public void SetEnemyManaText(int manaAmount)
+    {
+        enemyManaText.text = "Mana: " + manaAmount;
     }
 }

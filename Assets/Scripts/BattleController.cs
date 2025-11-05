@@ -9,8 +9,8 @@ public class BattleController : MonoBehaviour
         instance = this;
     }
     public int startingMana = 4, maxMana = 12;
-    public int playerMana;
-    private int currentPlayerMaxMana;
+    public int playerMana, enemyMana;
+    private int currentPlayerMaxMana, currentEnemyMaxMana;
     public int startingCardsAmount = 5;
     public int cardsToDrawPerTurn = 2;
     public enum TurnOrder { playerActive, playerCardAttacks, enemyActive, enemyCardAttacks }
@@ -27,6 +27,8 @@ public class BattleController : MonoBehaviour
         DeckController.instance.DrawMultipleCards(startingCardsAmount);
         UICOntroller.instance.SetPlayerHealthText(playerHealth);
         UICOntroller.instance.SetEnemyHealthText(enemyHealth);
+        currentEnemyMaxMana = startingMana;
+        FillEnemyMana();
     }
 
     // Update is called once per frame
@@ -77,8 +79,14 @@ public class BattleController : MonoBehaviour
                 CardPointsController.instance.PlayerAttack();
                 break;
             case TurnOrder.enemyActive:
-                Debug.Log("Skipping enemy actions");
-                AdvanceTurn();
+                //Debug.Log("Skipping enemy actions");
+                //AdvanceTurn();
+                if (currentEnemyMaxMana < maxMana)
+                {
+                    currentEnemyMaxMana++;
+                }
+                FillEnemyMana();
+                EnemyController.instance.StartAction();
                 break;
             case TurnOrder.enemyCardAttacks:
                 //Debug.Log("Skipping enemy card attacks");
@@ -126,6 +134,21 @@ public class BattleController : MonoBehaviour
             damageClone.gameObject.SetActive(true);
         }
 
+    }
+
+    public void SpendEnemyMana(int amountToSpend)
+    {
+        enemyMana -= amountToSpend;
+        if (enemyMana < 0)
+        {
+            enemyMana = 0;
+        }
+        UICOntroller.instance.SetEnemyManaText(enemyMana);
+    }
+    public void FillEnemyMana()
+    {
+        enemyMana = currentEnemyMaxMana;
+        UICOntroller.instance.SetEnemyManaText(enemyMana);
     }
 
 }
