@@ -21,6 +21,8 @@ public class BattleController : MonoBehaviour
     public int playerHealth;
     public int enemyHealth;
     public float resultScreenDelayTime = 1f;
+    [Range(0f, 1f)]
+    public float playerFirstChance = .5f;
     void Start()
     {
         //playerMana = startingMana;
@@ -32,6 +34,11 @@ public class BattleController : MonoBehaviour
         UICOntroller.instance.SetEnemyHealthText(enemyHealth);
         currentEnemyMaxMana = startingMana;
         FillEnemyMana();
+        if (Random.value > playerFirstChance)
+        {
+            currentPhase = TurnOrder.playerCardAttacks;
+            AdvanceTurn();
+        }
     }
 
     // Update is called once per frame

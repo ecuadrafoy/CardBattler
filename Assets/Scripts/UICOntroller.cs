@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class UICOntroller : MonoBehaviour
 {
@@ -16,6 +17,8 @@ public class UICOntroller : MonoBehaviour
     public UIDamageIndicator playerDamage, enemyDamage;
     public GameObject battleEndScreen;
     public TMP_Text battleResultText;
+    public string mainMenuScene, battleSelectScene;
+    public GameObject pauseScreen;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -33,6 +36,10 @@ public class UICOntroller : MonoBehaviour
             {
                 manaWarning.SetActive(false);
             }
+        }
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            PauseUnpause();
         }
     }
     public void SetPlayerManaText(int manaAmount)
@@ -68,16 +75,33 @@ public class UICOntroller : MonoBehaviour
 
     public void MainMenu()
     {
-
+        SceneManager.LoadScene(mainMenuScene);
+        Time.timeScale = 1f;
     }
 
     public void RestartLevel()
     {
-
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        Time.timeScale = 1f;
     }
 
     public void ChooseNewBattle()
     {
+        SceneManager.LoadScene(battleSelectScene);
+        Time.timeScale = 1f;
+    }
+    public void PauseUnpause()
+    {
+        if (pauseScreen.activeSelf == false)
+        {
+            pauseScreen.SetActive(true);
+            Time.timeScale = 0;
 
+        }
+        else
+        {
+            pauseScreen.SetActive(false);
+            Time.timeScale = 1f;
+        }
     }
 }

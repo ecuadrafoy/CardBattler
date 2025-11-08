@@ -683,7 +683,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 79445b03839aa1342a3f32ed5d59bfb2, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -904,10 +904,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: UICanvas
       objectReference: {fileID: 0}
-    - target: {fileID: 2987556788140949807, guid: 53c12de2f67b4804eb0e02c1eed40966, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: MainMenu
-      objectReference: {fileID: 0}
     - target: {fileID: 4237638064411183297, guid: 53c12de2f67b4804eb0e02c1eed40966, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -1058,6 +1054,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2722955422429311148, guid: ca331b8a933f38a499218f914df8e69f, type: 3}
+      propertyPath: enemyAIType
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 2802138026246429633, guid: ca331b8a933f38a499218f914df8e69f, type: 3}
       propertyPath: m_Name
       value: EnemyController
